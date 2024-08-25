@@ -213,7 +213,6 @@ class Program
                     Console.SetCursorPosition(0, cursorTop);
                 }
             }
-        }
             Console.WriteLine("");
             trueS = true;
             Console.WriteLine("Please type password");
@@ -243,23 +242,22 @@ class Program
                     Console.SetCursorPosition(0, cursorTop);
                 }
             }
+        }
+            
 
-            Console.Clear();
 
             //
 
-            if (username == "Doktor Goran")
-            {
-                string doctorFolderPath = Path.Combine("Doktor Goran");
+            string doctorFolderPatha = Path.Combine(username);
 
-                // Check if the folder exists
-                if (Directory.Exists(doctorFolderPath))
-                {
-                    Console.WriteLine($"Accessing folder: {doctorFolderPath}");
+            // Check if the folder exists
+            if (Directory.Exists(doctorFolderPatha))
+            {
+                    Console.WriteLine($"Accessing folder: {doctorFolderPatha}");
                     Console.WriteLine("");
 
                     // List files or handle the folder contents
-                    string[] files = Directory.GetFiles(doctorFolderPath);
+                    string[] files = Directory.GetFiles(doctorFolderPatha);
                     Console.WriteLine("Files in the folder:");
                     foreach (string file in files)
                     {
@@ -277,7 +275,7 @@ class Program
                     if (yesNo == "yes")
                     {
                         // Define the path for the "patients" folder
-                        string patientsFolderPath = Path.Combine(doctorFolderPath, "patients");
+                        string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
 
                         // Create the "patients" folder
                         Directory.CreateDirectory(patientsFolderPath);
@@ -322,7 +320,7 @@ class Program
                     if (OneOrTwo == "1")
                     {
                         // Define the path for the "patients" folder
-                        string patientsFolderPath = Path.Combine(doctorFolderPath, "patients");
+                        string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
 
                         // Check if the "patients" folder exists
                         if (Directory.Exists(patientsFolderPath))
@@ -346,7 +344,7 @@ class Program
                     else if (OneOrTwo == "2")
                     {
                         // Define the path for the "patients" folder
-                        string patientsFolderPath = Path.Combine(doctorFolderPath, "patients");
+                        string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
 
                         // Check if the "patients" folder exists
                         if (Directory.Exists(patientsFolderPath))
@@ -380,16 +378,12 @@ class Program
                         }
                     }
                     // You can add code here to handle files or interact with them
-                }
-                else
-                {
-                    Console.WriteLine("Doctor's folder does not exist.");
-                }
             }
             else
             {
-                Console.WriteLine("Invalid username.");
+                Console.WriteLine("Doctor's folder does not exist.");
             }
+            
         }
 
 
