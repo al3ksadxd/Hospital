@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.ExceptionServices;
 using System.Xml.Schema;
 
 class Program
 {
-    
+
     static void Main()
     {
         Console.ForegroundColor = ConsoleColor.White;
@@ -26,7 +27,7 @@ class Program
         string doctorPassword = "123456";
 
         //login choise "login as doctor or admin"
-        Choise(ref loginAs,doctorLogin,adminLogin,ref trueS,cursorLeft,cursorTop);
+        Choise(ref loginAs, doctorLogin, adminLogin, ref trueS, cursorLeft, cursorTop);
 
         Console.Clear();
 
@@ -39,9 +40,10 @@ class Program
         {
 
             //admin login
-            
+
             if (yesnochoisetype)
             {
+                Console.Clear();
                 loginAs = "";
                 Console.WriteLine("If you want to login as doctor type doctor or if you want to login as admin type admin");
                 trueS = true;
@@ -60,15 +62,12 @@ class Program
                     }
                     else
                     {
-                        Console.SetCursorPosition(0, cursorTop - 1);
-                        Console.Write(new string(' ', Console.WindowWidth));
-                        Console.SetCursorPosition(0, cursorTop - 1);
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine("If you want to login as doctor type doctor or if you want to login as admin type admin");
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Please try again:");
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.SetCursorPosition(0, cursorTop);
-                        Console.Write(new string(' ', Console.WindowWidth));
-                        Console.SetCursorPosition(0, cursorTop);
+
                     }
                 }//typing doctor or admin corrector
             }
@@ -239,7 +238,7 @@ class Program
                         Console.WriteLine("you typed wrong try agan");
                     }
                 }
-                
+
             }//if typed no it go back admin login
 
             if (loginAs == doctorLogin)
@@ -320,164 +319,330 @@ class Program
                     }
                 }
             }
-        }
-        
 
-        Console.Clear();
-
-        //
-
-        string doctorFolderPatha = Path.Combine(username);
-
-        // Check if the folder exists
-        if (Directory.Exists(doctorFolderPatha))
-        {
-            Console.WriteLine($"Accessing folder: {doctorFolderPatha}");
-            Console.WriteLine("");
-
-            // List files or handle the folder contents
-            string[] files = Directory.GetFiles(doctorFolderPatha);
-            Console.WriteLine("Files in the folder:");
-            foreach (string file in files)
-            {
-                Console.WriteLine(Path.GetFileName(file));
-
-            }
-            Console.WriteLine("Patient folder");
-
-
-            //patients add
-            Console.WriteLine("");
-            Console.WriteLine("Do you want to add new patient?");
-            string yesNo = Console.ReadLine();
             Console.Clear();
-            if (yesNo == "yes")
+
+            //
+
+            string doctorFolderPatha = Path.Combine(username);
+
+            // Check if the folder exists
+            if (Directory.Exists(doctorFolderPatha))
             {
-                // Define the path for the "patients" folder
-                string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
+                Console.WriteLine($"Accessing folder: {doctorFolderPatha}");
+                Console.WriteLine("");
 
-                // Create the "patients" folder
-                Directory.CreateDirectory(patientsFolderPath);
-
-                // Prompt the user for the patient's full name
-                Console.WriteLine("Enter the patient's full name:");
-                string patientFullName = Console.ReadLine();
-
-                // Sanitize the patient name to remove invalid characters
-                string sanitizedPatientName = string.Concat(patientFullName.Split(Path.GetInvalidFileNameChars()));
-
-                // Define the path for the new patient text file
-                string patientFilePath = Path.Combine(patientsFolderPath, sanitizedPatientName + ".txt");
-
-                // Create and write to the patient text file
-                using (StreamWriter writer = new StreamWriter(patientFilePath))
+                // List files or handle the folder contents
+                string[] files = Directory.GetFiles(doctorFolderPatha);
+                Console.WriteLine("Files in the folder:");
+                foreach (string file in files)
                 {
-                    // Prompt the user for patient details
-                    Console.WriteLine("Enter patient year of birth nn/nn/nnnn");
-                    string patientDetails = Console.ReadLine();
+                    Console.WriteLine(Path.GetFileName(file));
 
-                    // Write the patient details to the file
-                    writer.WriteLine($"Full Name: {patientFullName}");
-                    writer.WriteLine($"Birth Year: {patientDetails}");
                 }
+                Console.WriteLine("Patient folder");
 
-                Console.WriteLine($"Patient file '{sanitizedPatientName}.txt' created and updated with details in 'patients' folder.");
 
-            }
-
-            else if (yesNo == "no")
-            {
-                //Console.WriteLine("to go back press Q");
-                //ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                //bool ifPressedQ = true;
-                //while (ifPressedQ)
-                //{
-                //    if (keyInfo.Key == ConsoleKey.Q)
-                //    {
-                //        Console.WriteLine("You pressed 'Q'. Exiting...");
-                //        ifPressedQ = false;
-                //        IfNoIsTyped = true;
-                //    }
-                //    else
-                //    {
-                //        IfNoIsTyped = false;
-                //        Console.WriteLine($"You pressed: {keyInfo.Key} try agan!");
-                //    }
-                //}
+                //patients add
+                Console.WriteLine("");
+                Console.WriteLine("Do you want to add new patient?");
+                string yesNo = Console.ReadLine();
                 Console.Clear();
-            }
-
-
-
-            //details
-            Console.WriteLine("if you want to list patients type 1 if you want to see patient details type 2");
-            string OneOrTwo = Console.ReadLine();
-            Console.Clear();
-            if (OneOrTwo == "1")
-            {
-                // Define the path for the "patients" folder
-                string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
-
-                // Check if the "patients" folder exists
-                if (Directory.Exists(patientsFolderPath))
+                bool abvgd = true;
+                if (yesNo == "yes")
                 {
-                    // Get all patient files in the folder
-                    string[] patientFiles = Directory.GetFiles(patientsFolderPath);
+                    // Define the path for the "patients" folder
+                    string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
 
-                    Console.WriteLine("List of patients:");
-                    foreach (string file in patientFiles)
-                    {
-                        // Print the file name (patient name) without the .txt extension
-                        Console.WriteLine(Path.GetFileNameWithoutExtension(file));
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("No patients found. The 'patients' folder does not exist.");
-                }
-            }
+                    // Create the "patients" folder
+                    Directory.CreateDirectory(patientsFolderPath);
 
-            else if (OneOrTwo == "2")
-            {
-                // Define the path for the "patients" folder
-                string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
-
-                // Check if the "patients" folder exists
-                if (Directory.Exists(patientsFolderPath))
-                {
                     // Prompt the user for the patient's full name
-                    Console.WriteLine("Enter the full name of the patient:");
+                    Console.WriteLine("Enter the patient's full name:");
                     string patientFullName = Console.ReadLine();
 
                     // Sanitize the patient name to remove invalid characters
                     string sanitizedPatientName = string.Concat(patientFullName.Split(Path.GetInvalidFileNameChars()));
 
-                    // Define the path for the patient's text file
+                    // Define the path for the new patient text file
                     string patientFilePath = Path.Combine(patientsFolderPath, sanitizedPatientName + ".txt");
 
-                    // Check if the file exists
-                    if (File.Exists(patientFilePath))
+                    // Create and write to the patient text file
+                    using (StreamWriter writer = new StreamWriter(patientFilePath))
                     {
-                        // Read and display the contents of the file
-                        string fileContent = File.ReadAllText(patientFilePath);
-                        Console.WriteLine("Patient details:");
-                        Console.WriteLine(fileContent);
+                        // Prompt the user for patient details
+                        Console.WriteLine("Enter patient year of birth nn/nn/nnnn");
+                        string patientDetails = Console.ReadLine();
+
+                        // Write the patient details to the file
+                        writer.WriteLine($"Full Name: {patientFullName}");
+                        writer.WriteLine($"Birth Year: {patientDetails}");
                     }
-                    else
-                    {
-                        Console.WriteLine("Patient file does not exist.");
-                    }
+
+                    Console.WriteLine($"Patient file '{sanitizedPatientName}.txt' created and updated with details in 'patients' folder.");
+                    yesNo = "";
+                    Thread.Sleep(500);
                 }
-                else
+
+                else if (yesNo == "no")
                 {
-                    Console.WriteLine("No patients found. The 'patients' folder does not exist.");
+
+                    
+                    bool ifPressedQor1or2 = true;
+                    while (ifPressedQor1or2)
+                    {
+                        Console.WriteLine("if you want to list patients press P if you want to see patient detailspress D or press Q to exit");
+                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                        Console.Clear();
+
+                        if (keyInfo.Key == ConsoleKey.Q)
+                        {
+                            string pressq = "...";
+                            Console.Write("You pressed 'Q'. Exiting ");
+                            foreach (var item in pressq)
+                            {
+                                Console.Write(item);
+
+                                // Wait for 2 seconds before the next iteration
+                                Thread.Sleep(500);
+                            }
+                            Console.Clear();
+                            ifPressedQor1or2 = false;
+                            IfNoIsTyped = true;
+                            yesnochoisetype = true;
+                            doctorFolderPatha = "";
+                        }
+
+                        else if (keyInfo.Key == ConsoleKey.P)
+                        {
+                            // Define the path for the "patients" folder
+                            string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
+
+                            // Check if the "patients" folder exists
+                            if (Directory.Exists(patientsFolderPath))
+                            {
+                                // Get all patient files in the folder
+                                string[] patientFiles = Directory.GetFiles(patientsFolderPath);
+
+                                Console.WriteLine("List of patients:");
+
+                                bool hhj = true;
+
+                                foreach (string file in patientFiles)
+                                {
+                                    Console.WriteLine(Path.GetFileNameWithoutExtension(file)); // print the patient name without extension
+                                }
+                                
+
+
+
+                            }
+                            else
+                            {
+                                Console.WriteLine("No patients found. The 'patients' folder does not exist.");
+                            }
+
+                        }
+
+                        else if (keyInfo.Key == ConsoleKey.D)
+                        {
+                            // Define the path for the "patients" folder
+                            string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
+
+                            // Check if the "patients" folder exists
+                            if (Directory.Exists(patientsFolderPath))
+                            {
+                                // Prompt the user for the patient's full name
+                                Console.WriteLine("Enter the full name of the patient or type q to exit:");
+                                string patientFullName = Console.ReadLine();
+
+                                // Sanitize the patient name to remove invalid characters
+                                string sanitizedPatientName = string.Concat(patientFullName.Split(Path.GetInvalidFileNameChars()));
+
+                                // Define the path for the patient's text file
+                                string patientFilePath = Path.Combine(patientsFolderPath, sanitizedPatientName + ".txt");
+
+                                // Check if the file exists
+                                if (File.Exists(patientFilePath))
+                                {
+                                    // Read and display the contents of the file
+                                    string fileContent = File.ReadAllText(patientFilePath);
+                                    Console.WriteLine("Patient details:");
+                                    Console.WriteLine(fileContent);
+                                }
+                                else if (patientFullName == "q" || patientFullName == "Q")
+                                {
+                                    string pressq = "...";
+                                    Console.Write("You pressed 'Q'. Exiting ");
+                                    foreach (var item in pressq)
+                                    {
+                                        Console.Write(item);
+
+                                        // Wait for 2 seconds before the next iteration
+                                        Thread.Sleep(500);
+                                    }
+                                    Console.Clear();
+                                    ifPressedQor1or2 = false;
+                                    IfNoIsTyped = true;
+                                    yesnochoisetype = true;
+                                    doctorFolderPatha = "";
+
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Patient file does not exist.");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No patients found. The 'patients' folder does not exist.");
+                            }
+                        }
+
+                        else
+                        {
+                            IfNoIsTyped = false;
+                            Console.WriteLine($"You pressed: {keyInfo.Key} try agan!");
+                        }
+                    }
+                    // You can add code here to handle files or interact with them
+
+
+
+
+
+                    abvgd = false;
+                    Console.Clear();
                 }
+
+
+
+                //details
+
+
+                Console.Clear();
+
+                while (abvgd)
+                {
+                    Console.WriteLine("if you want to list patients press P if you want to see patient detailspress D or press Q to exit");
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                    Console.Clear();
+                    bool ifPressedQor1or2 = true;
+                    while (ifPressedQor1or2)
+                    {
+                        if (keyInfo.Key == ConsoleKey.Q)
+                        {
+                            string pressq = "...";
+                            Console.Write("You pressed 'Q'. Exiting ");
+                            foreach (var item in pressq)
+                            {
+                                Console.Write(item);
+
+                                // Wait for 2 seconds before the next iteration
+                                Thread.Sleep(500);
+                            }
+                            Console.Clear();
+                            ifPressedQor1or2 = false;
+                            IfNoIsTyped = true;
+                            yesnochoisetype = true;
+                            doctorFolderPatha = "";
+                            abvgd = false;
+                        }
+
+                        else if (keyInfo.Key == ConsoleKey.P)
+                        {
+                            // Define the path for the "patients" folder
+                            string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
+
+                            // Check if the "patients" folder exists
+                            if (Directory.Exists(patientsFolderPath))
+                            {
+                                // Get all patient files in the folder
+                                string[] patientFiles = Directory.GetFiles(patientsFolderPath);
+
+                                Console.WriteLine("List of patients:");
+                                foreach (string file in patientFiles)
+                                {
+                                    // Print the file name (patient name) without the .txt extension
+                                    Console.WriteLine(Path.GetFileNameWithoutExtension(file));
+                                }
+                                ifPressedQor1or2 = false;
+                                yesnochoisetype = true;
+                                IfNoIsTyped = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("No patients found. The 'patients' folder does not exist.");
+                            }
+                        }
+
+                        else if (keyInfo.Key == ConsoleKey.D)
+                        {
+                            // Define the path for the "patients" folder
+                            string patientsFolderPath = Path.Combine(doctorFolderPatha, "patients");
+
+                            // Check if the "patients" folder exists
+                            if (Directory.Exists(patientsFolderPath))
+                            {
+                                // Prompt the user for the patient's full name
+                                Console.WriteLine("Enter the full name of the patient or type q to exit:");
+                                string patientFullName = Console.ReadLine();
+
+                                // Sanitize the patient name to remove invalid characters
+                                string sanitizedPatientName = string.Concat(patientFullName.Split(Path.GetInvalidFileNameChars()));
+
+                                // Define the path for the patient's text file
+                                string patientFilePath = Path.Combine(patientsFolderPath, sanitizedPatientName + ".txt");
+
+                                // Check if the file exists
+                                if (File.Exists(patientFilePath))
+                                {
+                                    // Read and display the contents of the file
+                                    string fileContent = File.ReadAllText(patientFilePath);
+                                    Console.WriteLine("Patient details:");
+                                    Console.WriteLine(fileContent);
+                                }
+                                else if (patientFullName == "q" || patientFullName == "Q")
+                                {
+                                    string pressq = "...";
+                                    Console.Write("You pressed 'Q'. Exiting ");
+                                    foreach (var item in pressq)
+                                    {
+                                        Console.Write(item);
+
+                                        // Wait for 2 seconds before the next iteration
+                                        Thread.Sleep(500);
+                                    }
+                                    Console.Clear();
+                                    ifPressedQor1or2 = false;
+                                    IfNoIsTyped = true;
+                                    yesnochoisetype = true;
+                                    doctorFolderPatha = "";
+
+                                }
+
+                                else
+                                {
+                                    IfNoIsTyped = false;
+                                    Console.WriteLine($"You pressed: {keyInfo.Key} try agan!");
+                                }
+                            }
+                            // You can add code here to handle files or interact with them
+                        }
+
+
+
+                        else
+                        {
+                            Console.WriteLine("Doctor's folder does not exist.");
+                        }
+                    }
+
+
+
+                }
+                
             }
-            // You can add code here to handle files or interact with them
-        }
-        else
-        {
-            Console.WriteLine("Doctor's folder does not exist.");
         }
     }
     static void Choise(ref string loginAs, string doctorLogin, string adminLogin, ref bool trueS, int cursorLeft, int cursorTop)
